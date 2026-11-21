@@ -52,10 +52,28 @@ ${context}
 
 উত্তর:`;
 
-        const geminiResponse = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
-            contents: prompt,
-        });
+        const candidateModels = [
+            "gemini-3.1-flash-lite",
+            "gemini-flash-lite-latest",
+            "gemini-3.5-flash",
+            "gemini-flash-latest"
+        ];
+        let geminiResponse;
+        let lastErr;
+        for (const model of candidateModels) {
+            try {
+                geminiResponse = await ai.models.generateContent({
+                    model,
+                    contents: prompt,
+                });
+                if (geminiResponse?.text) break;
+            } catch (err) {
+                lastErr = err;
+            }
+        }
+        if (!geminiResponse) {
+            throw lastErr || new Error("Failed to generate response from Gemini API");
+        }
 
         const sources = [...new Set(metadatas.map((m) => m.source))];
 
