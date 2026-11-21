@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "chroma": "node chroma-server.js"
   },
   "dependencies": {
     "@google/genai": "^1.0.0",
